@@ -145,7 +145,7 @@ hypernova({
 <div class="pl-[40px]">
 <p class="pt-[10px]">MyComponent.js</p>
 
-```js
+```js{0|all}
 const React = require('react');
 const renderReact = require('hypernova-react').renderReact;
 
@@ -159,7 +159,7 @@ module.exports = renderReact('MyComponent.js', MyComponent);
 
 ---
 
-# Airbnb 사례: Hypernova(Key Points)
+# Airbnb 사례: Hypernova
 
 1. 클라이언트 코드가 서버 코드로부터 분리될 수 있음
 2. 점진적으로 적용 가능함
@@ -168,3 +168,255 @@ module.exports = renderReact('MyComponent.js', MyComponent);
 
 ---
 
+# New 프로그래머스 프론트엔드 아키텍처 - Core Concept
+
+- 웹 애플리케이션 manifest를 Rails 템플릿에 임베딩
+  - [Webpack Manifest](https://webpack.js.org/concepts/manifest/)
+- Vue/React/Anything in Rails
+
+---
+
+# Webpack Manifest
+
+Webpack으로 빌드된 애플리케이션이 포함하는 코드
+
+1. 개발자가 작성한 소스 코드
+2. 작성한 소스 코드가 의존하는 라이브러리 및 벤더(vendor) 코드
+3. Webpack runtime 및 **manifest**
+
+**Manifest**
+
+> As the compiler enters, resolves, and maps out your application, it keeps detailed notes on all your modules. This collection of data is called the "Manifest," and it's what the runtime will use to resolve and load modules once they've been bundled and shipped to the browser. 
+
+---
+
+# Webpack Manifest Plugin
+
+Webpack manifest를 추출할 수 있게 해주는 플러그인
+
+```ts{all|8-10}
+// webpack.config.ts
+import { WebpackManifestPlugin } from 'webpack-manifest-plugin';
+
+const productionConfig: Configuration = {
+  mode: 'production',
+  output: { filename: '[contenthash].js' },
+  module: { ... },
+  plugins: [
+    new WebpackManifestPlugin(),
+  ],
+};
+```
+
+```json{0|all}
+// dist/manifest.json
+{
+  "main.js": "/b815c1d65ebb736ed574.js",
+  "175.css": "/175.67ac9023a9a76244ce98.css",
+  "175.css.map": "/175.67ac9023a9a76244ce98.css.map",
+  "js": "/02067bc9c4a3d115e4c4.js",
+  "js.map": "/02067bc9c4a3d115e4c4.js.map",
+  "index.html": "/index.html",
+}
+```
+
+---
+
+# 기존 프로그래머스 프론트엔드 아키텍처
+
+<figure class="flex items-center justify-center">
+  <img src="/programmers-frontend-architecture-old.png" width=600 />
+</figure>
+
+---
+
+# 개선된 프로그래머스 프론트엔드 아키텍처
+
+<figure class="flex items-center justify-center">
+  <img src="/programmers-frontend-architecture-v1.png" width=600 />
+</figure>
+
+---
+
+# 개선된 아키텍처의 장점 - (1) Scalability
+
+기존 Rails 코드베이스의 수정 없이 새로운 웹 애플리케이션 개발 및 배포가 가능
+
+<figure class="flex items-center justify-center">
+  <img src="/programmers-frontend-architecture-v1-pros.png" width=720 />
+</figure>
+
+---
+
+# 개선된 아키텍처의 장점 - (2) Independency
+
+애플리케이션의 의존성을 독립적으로 관리가 가능
+
+<figure class="flex items-center justify-center">
+  <img src="/programmers-frontend-architecture-v1-pros-2.png" width=720 />
+</figure>
+
+---
+layout: center
+---
+
+## 그렇게 프로그래머스 프론트엔드 개발자들은 행복하게 잘 살았습니다
+
+---
+layout: center
+class: "text-center"
+---
+
+## 그렇게 프로그래머스 프론트엔드 개발자들은 행복하게 잘 살았습니다
+
+## ...가 또 불편한 점이 생겼습니다
+
+---
+
+# 개선된 아키텍처의 불편한 점
+
+각 애플리케이션에서 의존하는 코드가 새로 릴리즈되면 해당 사항을 반영하기 위해 모든 앱을 다시 배포해야 함
+
+<figure class="flex items-center justify-center">
+  <img src="/programmers-frontend-architecture-v1-cons.png" width=600 />
+</figure>
+
+---
+
+# 개선된 아키텍처의 불편한 점
+
+각 애플리케이션에서 의존하는 코드가 새로 릴리즈되면 해당 사항을 반영하기 위해 모든 앱을 다시 배포해야 함
+
+<figure class="flex items-center justify-center">
+  <img src="/programmers-frontend-architecture-v1-cons-2.png" width=600 />
+</figure>
+
+---
+layout: center
+class: "text-center"
+---
+
+앱을 다시 배포하지 않고 의존하는 코드의 변경사항을 런타임에 바로 적용할 수 없을까?
+
+---
+
+# Runtime Integration
+
+<div class="flex h-full items-center justify-center text-center">
+<h3 class="">
+Build-time에 소스 코드와 의존성을 모두 불러와 최종 번들에 포함시키는 것이 아니라<br />
+코드가 실행되는 런타임에 소스 코드와 의존성을 불러오는 구현 방식
+</h3>
+</div>
+
+---
+
+# Runtime Integration 구현 방법
+
+소스 코드가 Composite되는 순간에 따라 3가지 방법으로 구현 가능
+
+- Server Side Composition
+- Edge Side Composition
+- **Client Side Composition**
+  - Javascript, ifame, web components, etc.
+  - **[Webpack 5 Module Federation](https://webpack.js.org/concepts/module-federation/)**
+
+---
+
+# Webpack 5 Module Federation - Core Concept
+
+- 애플리케이션을 컨테이너로 바라봄
+- 컨테이너는 모듈을 외부로 노출(expose)할 수 있고, 외부에 노출된 모듈(remote module)을 사용할 수 있음
+- Webpack 5버전 부터 포함된 Container Plugin을 사용하여 적용 가능
+- Container Plugin을 추상화 한 [Module Federation Plugin](https://webpack.js.org/plugins/module-federation-plugin/)을 사용하면 더 쉽게 적용 가능
+
+---
+layout: two-cols
+---
+# Module Federation Plugin
+<br />
+<p>Host</p>
+
+```ts{all|5-12}
+import { container } from 'webpack';
+
+const config: Configuration = {
+  // ...생략
+  plugins: [
+    new container.ModuleFederationPlugin({
+      remotes: {
+        remoteApp: 
+          `remoteApp@${process.env.APP_URL}/remoteEntry.js`,
+      },
+    }),
+  ],
+}
+```
+
+::right::
+
+<br />
+<br />
+<br />
+
+
+<div class="pl-[40px]">
+<p class="pt-[40px]">Remote</p>
+
+```ts{0|all|5-13}
+import { container } from 'webpack';
+
+const config: Configuration = {
+  // ... 생략
+  plugins: [
+    new container.ModuleFederationPlugin({
+      name: 'remoteApp',
+      filename: 'remoteEntry.js',
+      exposes: {
+        './Header': './src/components/Header.tsx',
+      },
+    }),
+  ],
+};
+```
+
+</div>
+
+---
+
+# Module Federation Example
+
+```tsx{0|all|1|all}
+import { mount } from 'remoteApp/Header';
+import { useEffect, useRef } from 'react';
+
+function Header() {
+  const mountRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    mount(mountRef.current);
+  }, []);
+
+  return (
+    <div ref={mountRef} />
+  );
+}
+export default Header;
+```
+
+---
+
+# TBD: 다이어그램 넣기!!
+
+---
+
+# Lessons Learned
+
+---
+
+# Next Steps
+
+- Rails Webpacker => [Shakapacker](https://github.com/shakacode/shakapacker)
+  - Use Module Federation Directly
+- Managing remote entries
+- DX(type check for remote modules, communication between apps, best practices, etc.)
