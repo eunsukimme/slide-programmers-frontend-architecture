@@ -299,43 +299,30 @@ class: "text-center"
 앱을 다시 배포하지 않고 의존하는 코드의 변경사항을 런타임에 바로 적용할 수 없을까?
 
 ---
-
-# Runtime Integration
-
-<div class="flex h-full items-center justify-center text-center">
-<h3 class="">
-Build-time에 소스 코드와 의존성을 모두 불러와 최종 번들에 포함시키는 것이 아니라<br />
-코드가 실행되는 런타임에 소스 코드와 의존성을 불러오는 구현 방식
-</h3>
-</div>
-
+layout: center
+class: "text-center"
 ---
 
-# Runtime Integration 구현 방법
+앱을 다시 배포하지 않고 의존하는 코드의 변경사항을 런타임에 바로 적용할 수 없을까?
 
-소스 코드가 Composite되는 순간에 따라 3가지 방법으로 구현 가능
-
-- Server Side Composition
-- Edge Side Composition
-- **Client Side Composition**
-  - Javascript, ifame, web components, etc.
-  - **[Webpack 5 Module Federation](https://webpack.js.org/concepts/module-federation/)**
+## Webpack 5 Module Federation
 
 ---
 
 # Webpack 5 Module Federation - Core Concept
 
-- 애플리케이션을 컨테이너로 바라봄
-- 컨테이너는 모듈을 외부로 노출(expose)할 수 있고, 외부에 노출된 모듈(remote module)을 사용할 수 있음
+- 빌드된 애플리케이션 = 컨테이너
+  - 호스트(Host) 컨테이너: 모듈을 외부로 노출(expose)
+  - 리모트(Remote) 컨테이너: 외부에 노출된 모듈을 불러와 사용
 - Webpack 5버전 부터 포함된 Container Plugin을 사용하여 적용 가능
-- Container Plugin을 추상화 한 [Module Federation Plugin](https://webpack.js.org/plugins/module-federation-plugin/)을 사용하면 더 쉽게 적용 가능
+  - Container Plugin을 추상화 한 [Module Federation Plugin](https://webpack.js.org/plugins/module-federation-plugin/)을 사용하면 더 쉽게 적용 가능
 
 ---
 layout: two-cols
 ---
 # Module Federation Plugin
 <br />
-<p>Host</p>
+<p>Host 컨테이너의 webpack config</p>
 
 ```ts{all|5-12}
 import { container } from 'webpack';
@@ -357,11 +344,10 @@ const config: Configuration = {
 
 <br />
 <br />
-<br />
 
 
 <div class="pl-[40px]">
-<p class="pt-[40px]">Remote</p>
+  <p class="pt-[30px]">Remote 컨테이너의 webpack config</p>
 
 ```ts{0|all|5-13}
 import { container } from 'webpack';
@@ -386,37 +372,98 @@ const config: Configuration = {
 
 # Module Federation Example
 
-```tsx{0|all|1|all}
-import { mount } from 'remoteApp/Header';
-import { useEffect, useRef } from 'react';
+#### 외부 모듈 사용 예시
 
-function Header() {
-  const mountRef = useRef<HTMLDivElement>(null);
+```tsx{all|4,6,7,9,11,12}
+import { LoadingSpinner } from '@/components/LoadingSpinner'
+import { Suspense } from 'react';
 
-  useEffect(() => {
-    mount(mountRef.current);
-  }, []);
+const Header = lazy(() => import('remoteApp/Header'));
 
+function CustomHeader() {
   return (
-    <div ref={mountRef} />
+    <Suspense fallback={<LoadingSpinner />} >
+      <Header />
+    </Suspense>
   );
 }
-export default Header;
+export default CustomHeader;
 ```
 
 ---
 
-# TBD: 다이어그램 넣기!!
+# 개선된 프론트엔드 아키텍처(현재)
+
+<figure class="flex items-center justify-center">
+  <img src="/programmers-frontend-architecture-v2.png" width=620 />
+</figure>
 
 ---
+layout: center
+class: "text-center"
+---
 
-# Lessons Learned
+그래서 우리는 얼마나 빠르게 제품을 개발하고 배포할 수 있게 되었을까요?
+
+---
+layout: center
+class: "text-center"
+---
+
+#### 프로덕션 릴리즈 횟수
+
+<br />
+
+2022년 3월: 46회
+
+### 2022년 11월: 173회
+
+---
+layout: center
+class: "text-center"
+---
+
+#### 프론트엔드 프로덕션 배포 소요 시간
+
+<br />
+
+기존: 30 ~ 40분
+
+### 현재: < 5분
+
+---
+layout: center
+class: "text-center"
+---
+
+#### Closed Pull Request 개수
+
+<br />
+
+기존 repo: 6년 4개월 간 5500여개 (72 PRs / month)
+
+### 신규 repo: 8개월 간 1400여개 (175 PRs / month)
 
 ---
 
 # Next Steps
 
-- Rails Webpacker => [Shakapacker](https://github.com/shakacode/shakapacker)
-  - Use Module Federation Directly
-- Managing remote entries
-- DX(type check for remote modules, communication between apps, best practices, etc.)
+- Rails Webpacker를 [Shakapacker](https://github.com/shakacode/shakapacker)로 마이그레이션
+  - Webpack 5 의 기능을 사용할 뿐만 아니라 babel 외의 빌드 도구(swc, esbuild)도 사용 가능
+- Rails 애플리케이션에서 Webpack 의존성을 분리
+  - Rails는 마치 API 서버처럼 동작
+- 개발 경험 개선
+  - remote module의 type checking
+  - 앱 간의 커뮤니케이션 컨벤션 정의
+  - Best practice 탐구
+
+---
+layout: center
+---
+
+### 프로그래머스의 프론트엔드 개발 경험을 개선하기 위한 모험은 계속됩니다
+
+---
+
+# Recap
+
