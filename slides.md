@@ -1,12 +1,6 @@
 ---
-# try also 'default' to start simple
-# theme: seriph
 theme: default
-# random image from a curated Unsplash collection by Anthony
-# like them? see https://unsplash.com/collections/94734566/slidev
-background: https://source.unsplash.com/collection/94734566/1920x1080
-# apply any windi css classes to the current slide
-# class: "text-center"
+background: https://user-images.githubusercontent.com/31213226/205931450-1ecd6bea-42a0-46cc-aabf-23aeb8e80077.png
 # https://sli.dev/custom/highlighters.html
 highlighter: shiki
 # show line numbers in code blocks
@@ -28,9 +22,10 @@ fonts:
   local: "Noto Sans KR, Roboto"
 ---
 
-<h1>프로그래머스 프론트엔드<br /> 아키텍처 변천사</h1>
-
-## :좋은 개발 경험을 찾아서
+<div class="text-[2.5rem]">
+  프로그래머스 프론트엔드 아키텍처 변천사<br />
+  <span class="text-[1.5rem]">:좋은 개발 경험을 찾아서</span>
+</div>
 
 ---
 
@@ -84,7 +79,7 @@ fonts:
 layout: center
 ---
 
-# 그래서 우리는 프론트엔드 아키텍처를 개선하기로 했습니다
+## 그래서 우리는 프론트엔드 아키텍처를 개선하기로 했습니다
 
 ---
 
@@ -170,7 +165,8 @@ module.exports = renderReact('MyComponent.js', MyComponent);
 
 # New 프로그래머스 프론트엔드 아키텍처 - Core Concept
 
-- 웹 애플리케이션 manifest를 Rails 템플릿에 임베딩
+- 프론트엔드 코드를 저장할 모노 레포지토리
+- 프론트엔드 애플리케이션 manifest를 Rails 템플릿에 임베딩
   - [Webpack Manifest](https://webpack.js.org/concepts/manifest/)
 - Vue/React/Anything in Rails
 
@@ -182,7 +178,7 @@ Webpack으로 빌드된 애플리케이션이 포함하는 코드
 
 1. 개발자가 작성한 소스 코드
 2. 작성한 소스 코드가 의존하는 라이브러리 및 벤더(vendor) 코드
-3. Webpack runtime 및 **manifest**
+3. **Webpack runtime 및 manifest**
 
 **Manifest**
 
@@ -243,7 +239,7 @@ const productionConfig: Configuration = {
 기존 Rails 코드베이스의 수정 없이 새로운 웹 애플리케이션 개발 및 배포가 가능
 
 <figure class="flex items-center justify-center">
-  <img src="/programmers-frontend-architecture-v1-pros.png" width=720 />
+  <img src="/programmers-frontend-architecture-v1-pros.png" width=700 />
 </figure>
 
 ---
@@ -253,23 +249,23 @@ const productionConfig: Configuration = {
 애플리케이션의 의존성을 독립적으로 관리가 가능
 
 <figure class="flex items-center justify-center">
-  <img src="/programmers-frontend-architecture-v1-pros-2.png" width=720 />
+  <img src="/programmers-frontend-architecture-v1-pros-2.png" width=700 />
 </figure>
 
 ---
 layout: center
 ---
 
-## 그렇게 프로그래머스 프론트엔드 개발자들은 행복하게 잘 살았습니다
+### 그렇게 프로그래머스 프론트엔드 개발자들은 행복하게 잘 살았습니다
 
 ---
 layout: center
 class: "text-center"
 ---
 
-## 그렇게 프로그래머스 프론트엔드 개발자들은 행복하게 잘 살았습니다
+### 그렇게 프로그래머스 프론트엔드 개발자들은 행복하게 잘 살았습니다
 
-## ...가 또 불편한 점이 생겼습니다
+### ...가 또 불편한 점이 생겼습니다
 
 ---
 
@@ -312,16 +308,22 @@ class: "text-center"
 # Webpack 5 Module Federation - Core Concept
 
 - 빌드된 애플리케이션 = 컨테이너
-  - 호스트(Host) 컨테이너: 모듈을 외부로 노출(expose)
-  - 리모트(Remote) 컨테이너: 외부에 노출된 모듈을 불러와 사용
+  - 호스트(Host) 컨테이너: 외부에 노출된 모듈을 불러와 사용
+  - 리모트(Remote) 컨테이너: 모듈을 외부로 노출(expose)
 - Webpack 5버전 부터 포함된 Container Plugin을 사용하여 적용 가능
   - Container Plugin을 추상화 한 [Module Federation Plugin](https://webpack.js.org/plugins/module-federation-plugin/)을 사용하면 더 쉽게 적용 가능
+
+<figure class="flex items-center justify-center">
+  <img src="/programmers-frontend-architecture-module-federation.png" width=600 class="mt-[40px]" />
+</figure>
 
 ---
 layout: two-cols
 ---
 # Module Federation Plugin
+
 <br />
+
 <p>Host 컨테이너의 webpack config</p>
 
 ```ts{all|5-12}
@@ -370,9 +372,9 @@ const config: Configuration = {
 
 ---
 
-# Module Federation Example
+# Module Federation 사용 예시
 
-#### 외부 모듈 사용 예시
+<br />
 
 ```tsx{all|4,6,7,9,11,12}
 import { LoadingSpinner } from '@/components/LoadingSpinner'
@@ -403,20 +405,7 @@ layout: center
 class: "text-center"
 ---
 
-그래서 우리는 얼마나 빠르게 제품을 개발하고 배포할 수 있게 되었을까요?
-
----
-layout: center
-class: "text-center"
----
-
-#### 프로덕션 릴리즈 횟수
-
-<br />
-
-2022년 3월: 46회
-
-### 2022년 11월: 173회
+#### 그래서 우리는 얼마나 빠르게 제품을 개발하고 배포할 수 있게 되었을까요?
 
 ---
 layout: center
@@ -427,9 +416,22 @@ class: "text-center"
 
 <br />
 
-기존: 30 ~ 40분
+<span class="opacity-[0.6]">기존: 30 ~ 40분</span>
 
 ### 현재: < 5분
+
+---
+layout: center
+class: "text-center"
+---
+
+#### 프로덕션 릴리즈 횟수
+
+<br />
+
+<span class="opacity-[0.6]">2022년 3월: 46회</span>
+
+### 2022년 11월: 173회
 
 ---
 layout: center
@@ -440,7 +442,7 @@ class: "text-center"
 
 <br />
 
-기존 repo: 6년 4개월 간 5500여개 (72 PRs / month)
+<span class="opacity-[0.6]">기존 repo: 6년 4개월 간 5500여개 (72 PRs / month)</span>
 
 ### 신규 repo: 8개월 간 1400여개 (175 PRs / month)
 
@@ -448,14 +450,37 @@ class: "text-center"
 
 # Next Steps
 
-- Rails Webpacker를 [Shakapacker](https://github.com/shakacode/shakapacker)로 마이그레이션
-  - Webpack 5 의 기능을 사용할 뿐만 아니라 babel 외의 빌드 도구(swc, esbuild)도 사용 가능
-- Rails 애플리케이션에서 Webpack 의존성을 분리
-  - Rails는 마치 API 서버처럼 동작
+- Rails 번들러 마이그레이션
+- Rails에서 번들러 의존성을 제거
 - 개발 경험 개선
-  - remote module의 type checking
-  - 앱 간의 커뮤니케이션 컨벤션 정의
-  - Best practice 탐구
+
+---
+
+# Next Steps - (1) Rails 번들러 마이그레이션
+
+Rails Webpacker를 Shakapacker로 마이그레이션하여 Webpack 5버전을 사용할 뿐만 아니라 babel 외의 빌드 도구(swc, esbuild)도 사용 가능
+
+<figure class="flex items-center justify-center mt-[-20px]">
+  <img src="/programmers-frontend-architecture-next-step-1.png" width=520 />
+</figure>
+
+---
+
+# Next Steps - (2) Rails에서 번들러 의존성을 제거
+
+Rails로부터 번들러(Webpacker) 의존성을 분리함으로써 Rails는 API 서버 처럼 동작
+
+<figure class="flex items-center justify-center">
+  <img src="/programmers-frontend-architecture-next-step-2.png" width=500 />
+</figure>
+
+---
+
+# Next Steps - (3) 개발 경험 개선
+
+- Remote module의 type checking
+- 앱 간의 커뮤니케이션 컨벤션 정의
+- Best practice 탐구
 
 ---
 layout: center
@@ -466,4 +491,14 @@ layout: center
 ---
 
 # Recap
+
+- Rails와 Vue가 함께 있는 레포지토리에서 프론트엔드 개발 경험이 좋지 않음
+- 프론트엔드 코드베이스를 Rails 코드와 분리시켜 독립적으로 개발/빌드/배포 할 수 있고 점진적으로 마이그레이션 가능한 아키텍처를 설계
+  - Airbnb의 Hypernova 사례를 바탕으로
+  - 신규 프론트엔드 애플리케이션의 Webpack manifest를 Rails 템플릿에 임베딩
+  - 신규 프론트엔드 애플리케이션 간의 Module Federation을 통한 Runtime Integration
+- 개발 경험을 개선하기 위한 노력이 여전히 진행 중
+  - Rails 번들러 마이그레이션
+  - Rails에서 번들러 의존성 제거
+  - 신규 프론트엔드 코드베이스의 개발 경험 개선
 
