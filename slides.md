@@ -28,6 +28,20 @@ fonts:
 </div>
 
 ---
+layout: image-left
+image: ./public/profile.jpeg
+---
+
+# Speaker
+
+<br />
+
+<span class="text-[20px]">김은수(Eunsu Kim)</span>
+
+- <span class="text-[16px]">(현) Grepp(프로그래머스) Frontend Developer</span>
+- <span class="text-[16px]">(전) Mathpresso(콴다) Frontend Developer</span>
+
+---
 
 # 프로그래머스
 
