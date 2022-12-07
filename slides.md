@@ -27,6 +27,8 @@ fonts:
   <span class="text-[1.5rem]">:좋은 개발 경험을 찾아서</span>
 </div>
 
+<img src="/public/slide-qrcode.png" class="absolute right-[20px] bottom-[20px] w-[200px]" />
+
 ---
 layout: image-left
 image: ./public/profile.jpeg
