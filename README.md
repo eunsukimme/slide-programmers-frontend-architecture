@@ -1,11 +1,17 @@
-# Welcome to [Slidev](https://github.com/slidevjs/slidev)!
+# 프로그래머스 프론트엔드 아키텍처 변쳔사: 좋은 개발 경험을 찾아서
 
-To start the slide show:
+2022년 12월 7일 AWS KRUG 프론트엔드 소모임에서 진행한 '프로그래머스 프론트엔드 아키텍처 변천사: 좋은 개발 경험을 찾아서' 세션의 발표 자료입니다.
+
+프로그래머스에서 프론트엔드 애플리케이션을 개발하면서 경험했던 불편한 점을 개선하기 위해 새로운 프론트엔드 아키텍처를 설계하면서 경험하고 고민했던 내용이 담겨있습니다.
+
+Webpack Manifest, Webpack 5 Module Federation을 활용하여 기존 코드베이스를 벗어나 프론트엔드 애플리케이션을 독립적으로 개발/빌드/배포할 수 있는 구조를 만들어가는 과정을 소개해 드립니다.
+
+## Getting Started
+
+이 발표 자료는 [Slidev](https://github.com/slidevjs/slidev)라는 도구를 사용해서 제작되었습니다. 슬라이드를 실행하려면 다음과 같이 명령을 실행하시면 됩니다.
 
 - `npm install`
 - `npm run dev`
 - visit http://localhost:3030
 
-Edit the [slides.md](./slides.md) to see the changes.
-
-Learn more about Slidev on [documentations](https://sli.dev/).
+슬라이드 코드는 [slides.md](./slides.md) 에서 확인할 수 있습니다.
